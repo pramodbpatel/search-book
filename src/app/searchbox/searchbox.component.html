@@ -1,0 +1,11 @@
+<div class="container">
+  <select [(ngModel)]="selectedGateway"  (change)="changeDeparture($event.target.value)" name="gateway_dep">
+    <option *ngFor="let gateway of gateways" [value]="gateway.code">{{gateway.name}}</option>
+  </select>
+  <select [(ngModel)]="selectedDeparture" (change)="getDuration($event.target.value)" name="dest_dep">
+    <option *ngFor="let depart of departOptions" [value]="depart.code">{{depart.name}}</option>
+  </select>
+  <select name="duration">
+    <option *ngFor="let duration of durations" [value]="duration.value">{{duration.name}}</option>
+  </select>
+</div>
