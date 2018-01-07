@@ -8,22 +8,43 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map'
 import { HttpErrorResponse } from "@angular/common/http/src/response";
 import { IDepartures } from './idepatures';
+import { IHotels } from './ihotels';
 
 @Injectable()
 export class ApiDataService {
-  private _gatewayURL = 'https://services.sunwinggroup.ca/beta/api/SV/search/getGatewayforBrand/en/SWG';
-  private _departURL = 'https://services.sunwinggroup.ca/beta/api/SV/search/getDestCode/en/SWG/'
+  private _serviceURL = 'http://infoservice.sunwingdev.local/HotelSearch';
 
   constructor(private _http: HttpClient) { }
 
   getGateways(): Observable<IGateway[]>{
-    return this._http.get<IGateway[]>(this._gatewayURL)
+    return this._http.post<IGateway[]>(this._serviceURL,{
+      "gateway": "Yes",
+      "destination": "",
+      "hotel": "",
+      "lang": ""
+    })
     //.do(data=>console.log(data))
     .catch(this.handleError);
   }
 
-  getDepatures(gateway): Observable<IDepartures[]>{
-    return this._http.get<IDepartures[]>(`${this._departURL}${gateway}`)
+  getDepatures(gateway): Observable<IGateway[]>{
+    return this._http.post<IGateway[]>(this._serviceURL,{
+      "gateway": gateway,
+      "destination": "Yes",
+      "hotel": "",
+      "lang": ""
+    })
+    //.do(data=>console.log(data))
+    .catch(this.handleError);
+  }
+
+  getHotelList(depart):Observable<IHotels[]>{
+    return this._http.post<IHotels[]>(this._serviceURL,{
+      "gateway": "",
+      "destination": depart,
+      "hotel": "Yes",
+      "lang": ""
+    })
     //.do(data=>console.log(data))
     .catch(this.handleError);
   }

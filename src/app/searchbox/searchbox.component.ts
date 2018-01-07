@@ -6,6 +6,7 @@ import { IDepartures } from "../shared/idepatures";
 import { forEach } from "@angular/router/src/utils/collection";
 import { IDeparts } from "../shared/ideparts";
 import { IDurations } from "../shared/idurations";
+import { IHotels } from "../shared/ihotels";
 
 @Component({
   selector: "app-searchbox",
@@ -14,17 +15,25 @@ import { IDurations } from "../shared/idurations";
 })
 export class SearchboxComponent implements OnInit {
   gateways: IGateway[];
-  departures: IDepartures[];
-  departOptions: IDeparts[] = [];
+  //departures: IDepartures[];
+  departures: IGateway[];
+  //departOptions: IDeparts[] = [];
   selectedGateway: string;
   selectedDeparture: string;
-  durations: IDurations[] = [];
+  //durations: IDurations[] = [];
+  hotels: IHotels[];
   errorMessage: any;
+  noOfChild: number;
+  selectChildAge: string;
+  selectAgeCounter: number[];
 
   constructor(private _apiDataService: ApiDataService) {}
 
   ngOnInit(): void {
     //getting the gateway values from API
+    this.noOfChild = 0;
+    this.selectChildAge = "row3 hide";
+    this.selectAgeCounter = [];
     this._apiDataService.getGateways().subscribe(gateways => {
       this.gateways = gateways;
     }, error => (this.errorMessage = <any>error));
@@ -40,7 +49,8 @@ export class SearchboxComponent implements OnInit {
   populateDeparture(value: string) {
     this._apiDataService.getDepatures(value).subscribe(departures => {
       this.departures = departures;
-      this.selectedDeparture = departures[0].groupCode;
+      this.selectedDeparture = departures[0].code;
+      /*this.selectedDeparture = departures[0].groupCode;
       while (this.departOptions.length > 0) this.departOptions.pop();
       departures.map(departure => {
         if (
@@ -71,15 +81,25 @@ export class SearchboxComponent implements OnInit {
           });
         }
       });
-      this.populateDuration(this.selectedDeparture);
+      this.populateDuration(this.selectedDeparture);*/
+      this.populateHotelList(this.selectedDeparture);
     }, error => (this.errorMessage = <any>error));
   }
 
-  getDuration(value: string) {
-    this.populateDuration(value);
+  changeHotel(value: string) {
+    this.populateHotelList(value);
   }
 
-  populateDuration(value: string) {
+  populateHotelList(value: string) {
+    this._apiDataService.getHotelList(value).subscribe(hotelList => {
+      this.hotels = hotelList;
+    });
+  }
+  /*getDuration(value: string) {
+    this.populateDuration(value);
+  }*/
+
+  /*populateDuration(value: string) {
     let dur = [];
     this.durations = [];
     let flag5,
@@ -105,5 +125,15 @@ export class SearchboxComponent implements OnInit {
         name: `${duration} days only`
       })
     );
+  }*/
+
+  addAge(value: string) {
+    this.selectAgeCounter = [];
+    this.noOfChild = parseInt(value);
+    if (this.noOfChild > 0) this.selectChildAge = "row3";
+    else this.selectChildAge = "row3 hide";
+    for (let i = 1; i <= this.noOfChild; i++) {
+      this.selectAgeCounter.push(i);
+    }
   }
 }

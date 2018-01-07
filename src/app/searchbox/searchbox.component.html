@@ -1,11 +1,102 @@
 <div class="container">
-  <select [(ngModel)]="selectedGateway"  (change)="changeDeparture($event.target.value)" name="gateway_dep">
-    <option *ngFor="let gateway of gateways" [value]="gateway.code">{{gateway.name}}</option>
-  </select>
-  <select [(ngModel)]="selectedDeparture" (change)="getDuration($event.target.value)" name="dest_dep">
-    <option *ngFor="let depart of departOptions" [value]="depart.code">{{depart.name}}</option>
-  </select>
-  <select name="duration">
-    <option *ngFor="let duration of durations" [value]="duration.value">{{duration.name}}</option>
-  </select>
+  <div class="wrapper">
+    <form name="frm" id="search-box-form-packages" method="get" action="/hotel" class="dt search-box-form">
+      <div class="row-wrapper">
+        <div class="mrow1">
+          <div className="form-group dtc departure-gateway">
+            <label for="Select1">Departing From</label>
+            <select [(ngModel)]="selectedGateway" (change)="changeDeparture($event.target.value)" name="gateway_dep" id="Select1">
+              <option *ngFor="let gateway of gateways" [value]="gateway.code">{{gateway.name}}</option>
+            </select>
+          </div>
+          <div class="form-group dtc arrival-gateway">
+            <label for="Select2">Going to</label>
+            <select [(ngModel)]="selectedDeparture" (change)="changeHotel($event.target.value)" name="dest_dep" id="Select2">
+              <option *ngFor="let depart of departures" [value]="depart.code">{{depart.name}}</option>
+            </select>
+          </div>
+          <div class="form-group dtc departure-date">
+            <label for="package_date_dep">Departing on : </label>
+            <input id="package_date_dep" type="date" name="depdatestart" value="2011-01-13" />
+          </div>
+          <div class="form-group dtc return-date">
+            <label for="package_date_ret">Departing on : </label>
+            <input id="package_date_ret" name="depdateend" type="date" value="2011-01-13" />
+          </div>
+          <div class="form-group dtc packages-days">
+            <label for="duration">Going for</label>
+            <select name="duration" id="duration">
+              <option value="aroundoneweek" selected="">Around a week</option>
+              <option value="shortstay">A few days</option>
+              <option value="aroundtendays">Around 10 nights</option>
+              <option value="aroundtwoweeks">Around 2 weeks</option>
+              <option value="longstay">Long stay</option>
+            </select>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="form-group dtc packages-rooms">
+            <label for="nb_rooms">Rooms</label>
+            <select name="nb_rooms" id="nb_rooms">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+          <div class="form-group dtc packages-adults">
+            <label for="nb_adult">Adults
+              <span>18+ yrs</span>
+            </label>
+            <select name="nb_adult_forf" id="nb_adult">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+          <div class="form-group dtc packages-children">
+            <label for="nb_child">Children
+              <i class="fa fa-edit fa-fw edit disabled"></i>
+              <span>0-17 yrs </span>
+            </label>
+            <select name="nb_child" id="nb_child" ([ngModel])="noOfChild" (change)="addAge($event.target.value)">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+          <div class="form-group dtc select-hotel">
+            <label for="Select6">Select a hotel
+              <span>(Optional)</span>
+            </label>
+            <select name="no_hotel" id="Select6">
+              <option *ngFor="let hotel of hotels" [value]="hotel.code">{{hotel.name}}</option>
+            </select>
+          </div>
+          <div class="form-group dtc search">
+            <button type="submit" class="btn btn-default">Search</button>
+          </div>
+        </div>
+        <div [ngClass]="selectChildAge">
+          <div class="form-group childage-wrapper">
+            <label for="promo-packages-childage1">Age of non-adults
+              <span>(For infant select 1)</span>
+            </label>
+            <div class="form-group dtc packages-children" *ngFor="let i of selectAgeCounter">
+              <select>
+                <option>{{i}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
